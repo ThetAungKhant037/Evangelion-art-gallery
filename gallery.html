@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Yohannan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .overlay-main {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-image: url('background-image.png');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center; /* Center the overlay-inner horizontally */
+            align-items: center; /* Center the overlay-inner vertically */
+        }
+
+        .nav {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            z-index: 2;
+            color: deeppink;
+            font-weight: bold;
+            padding: 10px 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: inherit;
+            margin-right: 20px;
+            font-size: 16px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .nav a:hover {
+            color: #0066cc;
+        }
+
+        .slider-container {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .slider-images {
+            display: flex;
+            align-items: center;
+            gap: 21px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slider-img {
+            width: 100px;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            transition: 0.7s ease;
+            height: 150px; /* Fixed height */
+        }
+
+        .slider-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        h1 {
+            font-family: "Jost", sans-serif;
+            font-size: 20px;
+            font-weight: bold; /* Changed font weight to bold */
+            text-align: center; /* Centered text */
+            text-transform: uppercase;
+            color: deeppink; /* Changed text color to deeppink */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Added text shadow */
+            position: absolute;
+            top: 10%; /* Adjusted top position */
+            left: 50%;
+            transform: translateX(-50%); /* Center horizontally */
+            z-index: 2; /* Ensure text is above images */
+            padding: 20px;
+            border-radius: 10px; /* Added border radius */
+        }
+
+        .details {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+        }
+
+        .details h2 {
+            font-family: "Jost", sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            text-align: left;
+            line-height: 20px;
+            color: #000;
+            text-transform: uppercase;
+            transition: 0.7s ease;
+            display: none;
+             color: deeppink; /* Changed text color to deeppink */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Added text shadow */
+        }
+
+        .details p {
+            font-family: "Jost", sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: left;
+            line-height: 16px;
+            color: #000;
+            text-transform: uppercase;
+            transition: 0.7s ease;
+            display: none;
+             color: deeppink; /* Changed text color to deeppink */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Added text shadow */
+        }
+
+        .slider-img.active {
+            width: 200px;
+            height: 300px;
+        }
+
+        .slider-img.active h1 {
+            display: none;
+        }
+
+        .slider-img.active .details p, 
+        .slider-img.active .details h2 {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .slider-img {
+                width: 80px;
+                height: 120px; /* Adjusted height for smaller screens */
+            }
+
+            .slider-img.active {
+                width: 160px;
+                height: 240px;
+            }
+
+            h1 {
+                font-size: 16px;
+            }
+
+            .details h2 {
+                font-size: 12px;
+                line-height: 16px;
+            }
+
+            .details p {
+                font-size: 10px;
+                line-height: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .slider-img {
+                width: 60px;
+                height: 90px; /* Adjusted height for smallest screens */
+            }
+
+            .slider-img.active {
+                width: 120px;
+                height: 180px;
+            }
+
+            h1 {
+                font-size: 12px;
+            }
+
+            .details h2 {
+                font-size: 10px;
+                line-height: 14px;
+            }
+
+            .details p {
+                font-size: 8px;
+                line-height: 12px;
+            }
+        }
+
+        .overlay-inner {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.6);
+            width: 70%;
+            height: 80%;
+            position: absolute;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+
+<div class="overlay-main">
+   
+
+    <div class="overlay-inner">
+        <div class="nav">
+        <a href="index.html">Index</a>
+        <a href="site.html">Site Info</a>
+    </div>
+        <h1>Choose the character</h1>
+        <section class="slider-container">
+            <div class="slider-images">
+                <div class="slider-img">
+                    <a href="shinji.html"><img src="g1/shinji9.jpg" alt="1" /></a>
+                    <h1>Shinji</h1>
+                    <div class="details">
+                        <h2>Shinji</h2>
+                        <p>male protagonist</p>
+                    </div>
+                </div>
+                <div class="slider-img">
+                    <img src="g3/kaworu.jpg" alt="2" />
+                    <h1>Kaworu </h1>
+                    <div class="details">
+                        <h2>Kaworu </h2>
+                        <p>side character</p>
+                    </div>
+                </div>
+                <div class="slider-img">
+                    <img src="g4/misato.jpg" alt="3" />
+                    <h1>Misato</h1>
+                    <div class="details">
+                        <h2>Misato</h2>
+                        <p>deuteragonist</p>
+                    </div>
+                </div>
+
+                <div class="slider-img active">
+                    <img src="g2/asuka.jpg" alt="4" />
+                    <h1>Asuka</h1>
+                    <div class="details">
+                        <h2>Asuka</h2>
+                        <p>female protagonist</p>
+                    </div>
+                </div>
+                <div class="slider-img">
+                    <img src="g5/rei.jpg" alt="5" />
+                    <h1>Rei</h1>
+                    <div class="details">
+                        <h2>Rei</h2>
+                        <p>female protagonist</p>
+                    </div>
+                </div>
+                <div class="slider-img">
+                    <img src="g6/kaji.jpg" alt="6" />
+                    <h1>Ryoji Kaji</h1>
+                    <div class="details">
+                        <h2>Ryoji Kaji</h2>
+                        <p>side character</p>
+                    </div>
+                </div>
+                <div class="slider-img">
+                    <img src="g7/gendo.jpg" alt="7" />
+                    <h1>Gendo Ikari</h1>
+                    <div class="details">
+                        <h2>Gendo Ikari</h2>
+                        <p>main antagonist</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script src="jQuery.js"></script>
+<script>
+    jQuery(document).ready(function ($) {
+        $(".slider-img").on("mouseover", function () {
+            $(".slider-img").removeClass("active");
+            $(this).addClass("active");
+        });
+    });
+</script>
+
+</body>
+</html>

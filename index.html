@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Yohannan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .overlay-main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('background-image.png');
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: 1;
+        }
+
+        .overlay-inner {
+            display: flex;
+            flex-direction: column; /* Stack nav and button vertically */
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.6); /* semi-transparent white */
+            width: 90%; /* Adjusted width for responsiveness */
+            max-width: 600px; /* Maximum width for larger screens */
+            height: 80%;
+            position: absolute;
+            z-index: 2;
+            top: 50%; /* Center vertically */
+            left: 50%; /* Center horizontally */
+            transform: translate(-50%, -50%);
+        }
+
+        #play-audio-button {
+            position: absolute;
+            top: 20px; /* Adjust top position */
+            right: 20px; /* Adjust right position */
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 3;
+        }
+
+        #play-audio-button img {
+            width: 40px; /* Adjust size of the icon */
+            height: 40px;
+            vertical-align: middle;
+        }
+
+        #play-audio-button.playing img {
+            filter: brightness(0) invert(1); /* Example of changing icon color when playing */
+        }
+
+        .nav {
+            display: flex;
+            justify-content: flex-start; /* Align items starting from the left */
+            align-items: center;
+            width: 100%;
+            color: deeppink;
+            font-weight: bold;
+            padding: 10px 20px; /* Adjusted padding for spacing */
+            box-sizing: border-box;
+            position: absolute;
+            top: 20px; /* Adjust top position */
+            left: 20px; /* Adjust left position */
+            z-index: 2; /* Ensure nav is above video */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Add text shadow */
+        }
+
+        .nav a {
+            cursor: pointer;
+            transition: color 0.3s; /* Smooth color transition on hover */
+            padding: 0 10px; /* Add padding between items */
+            text-transform: uppercase; /* Convert text to uppercase */
+            font-size: 16px; /* Font size for all navigation items */
+            text-decoration: none; /* Remove underline from links */
+            color: inherit; /* Inherit text color */
+        }
+
+        .nav a:first-child {
+            font-size: 24px; /* Larger font size for the first navigation item */
+            margin-right: 20px; /* Adjust margin for spacing */
+        }
+
+        .nav a:not(:first-child) {
+            margin-right: 20px; /* Adjust margin for spacing */
+        }
+
+        .nav a:hover {
+            color: #0066cc; /* Change text color on hover */
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .overlay-inner {
+                width: 95%; /* Adjusted width for smaller screens */
+            }
+
+            #play-audio-button {
+                top: 10px; /* Adjust top position for smaller screens */
+                right: 10px; /* Adjust right position for smaller screens */
+            }
+
+            #play-audio-button img {
+                width: 30px; /* Adjust size of the icon for smaller screens */
+                height: 30px;
+            }
+
+            .nav {
+                top: 10px; /* Adjust top position for smaller screens */
+                left: 10px; /* Adjust left position for smaller screens */
+            }
+
+            .nav a:first-child {
+                font-size: 20px; /* Adjust font size for the first navigation item on smaller screens */
+            }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            color: white;
+            font-size: 24px;
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+
+        .loading-content {
+            text-align: center;
+        }
+
+        .loading-icon {
+            width: 100px;
+            height: 100px;
+            background-image: url('loading.gif'); /* Replace with your loading image */
+            background-size: cover;
+            background-repeat: no-repeat;
+            animation: spin 1s linear infinite;
+        }
+
+       
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="overlay-main">
+    
+</div>
+
+<div class="overlay-inner">
+    <div class="nav">
+        <a href="index.html">Index</a>
+        <a href="#" id="gallery-link">Art Gallery</a>
+        <a href="site.html">Site Info</a>
+    </div>
+    
+    <button id="play-audio-button" aria-label="Play Audio">
+        <img src="audio-icon.png" alt="Audio Icon">
+    </button>
+
+    <video autoplay muted loop>
+        <source src="video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
+
+<audio id="welcome-audio" src="background-music.mp3" preload="auto"></audio>
+
+<div class="loading-overlay" id="loadingOverlay" style="display:none;">
+    <div class="loading-content">
+        <div class="loading-icon"></div>
+        <p>Loading...</p>
+    </div>
+</div>
+
+<script>
+    var playButton = document.getElementById('play-audio-button');
+    var audio = document.getElementById('welcome-audio');
+    var galleryLink = document.getElementById('gallery-link');
+    var loadingOverlay = document.getElementById('loadingOverlay');
+
+    playButton.addEventListener('click', function() {
+        if (audio.paused) {
+            audio.play();
+            playButton.classList.add('playing');
+        } else {
+            audio.pause();
+            audio.currentTime = 0;
+            playButton.classList.remove('playing');
+        }
+    });
+
+    galleryLink.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent default navigation
+
+        // Show loading overlay
+        loadingOverlay.style.display = 'flex';
+
+        // Simulate loading for 2 seconds
+        setTimeout(function() {
+            // Navigate to the gallery page
+            window.location.href = "gallery.html";
+        }, 1000); // 2 seconds
+    });
+
+    audio.addEventListener('ended', function() {
+        playButton.classList.remove('playing');
+    });
+</script>
+
+</body>
+</html>
